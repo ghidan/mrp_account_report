@@ -1,0 +1,11 @@
+<odoo>
+    <data>
+        <report
+                id="action_report_consumption"
+                string="Consumption Summary"
+                model="report.mrp_account_report.report_consumption"
+                report_type="qweb-pdf"
+                name="mrp_account_report.report_consumption"
+                file="mrp_account_report.report_consumption"/>
+    </data>
+</odoo>

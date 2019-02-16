@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+mrp_costing_manager,mrp.costing.manager,model_mrp_costing,account.group_account_manager,1,1,0,1
+mrp_costing_accountants,mrp.costing.accountants,model_mrp_costing,account.group_account_user,1,0,0,0
+mrp_costing_manufacturing_user,mrp.costing.manufacturing_user,model_mrp_costing,mrp.group_mrp_user,0,0,1,0
+mrp_report_mrp_account_report_report_consumption,mrp.report.mrp_account_report.report_consumption,model_report_mrp_account_report_report_consumption,,1,1,1,1
+mrp_consumption_wizard_id,mrp.consumption.wizard.id,model_mrp_consumption_wizard,,1,1,1,1
+
+

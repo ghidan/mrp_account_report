@@ -1,0 +1,143 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="mrp_costing_tree">
+            <field name="name">mrp.costing.tree</field>
+            <field name="model">mrp.costing</field>
+            <field name="arch" type="xml">
+                <tree string="list">
+                    <field name="product_id"/>
+                    <field name="user_id"/>
+                    <field name="cost"/>
+                    <field name="date"/>
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="mrp_costing_form">
+            <field name="name">mrp.costing.form</field>
+            <field name="model">mrp.costing</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="product_id"/>
+                            <h1>
+                                <field name="product_id"/>
+                            </h1>
+                        </div>
+                        <group colspan="4">
+                            <group colspan="1" col="2">
+                                <field name="user_id"/>
+                                <field name="cost"/>
+                                <field name="date"/>
+                                <field name="order_id" invisible="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread" options="{'post_refresh': 'recipients'}"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <record id="mrp_costing_kanban_view" model="ir.ui.view">
+            <field name="name">mrp.costing.kanban</field>
+            <field name="model">mrp.costing</field>
+            <field name="arch" type="xml">
+                <kanban>
+                    <field name="id"/>
+                    <field name="product_id"/>
+                    <field name="user_id"/>
+                    <field name="cost"/>
+                    <field name="date"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_card oe_kanban_global_click">
+                                <div class="o_kanban_record_top mb16">
+                                    <div class="o_kanban_record_headings mt4">
+                                        <strong class="o_kanban_record_title">
+                                            <span>
+                                                <t t-esc="record.product_id.value"/>
+                                            </span>
+                                        </strong>
+                                    </div>
+                                    <strong>
+                                        <field name="cost" widget="monetary"/>
+                                    </strong>
+                                </div>
+                                <div class="o_kanban_record_bottom">
+                                    <div class="oe_kanban_bottom_left text-muted">
+                                        <span>
+                                            <t t-esc="record.date.value"/>
+                                        </span>
+                                    </div>
+                                    <div class="oe_kanban_bottom_right">
+                                        <field name="user_id" widget="label_selection"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+        <record id="mrp_costing_search" model="ir.ui.view">
+            <field name="name">mrp.costing.earch</field>
+            <field name="model">mrp.costing</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="product_id"/>
+                    <field name="date"/>
+                    <field name="user_id"/>
+
+                    <filter string="Today"
+                            domain="[('date','&gt;=', datetime.datetime.combine(context_today(), datetime.time(0,0,0))),
+                             ('date','&lt;=', datetime.datetime.combine(context_today(), datetime.time(23,59,59)))]"/>
+                    <filter name="week" string="This Week"
+                            domain="[
+                                '&amp;',
+                                ('date', '>=', (context_today() + relativedelta(weeks=-1,days=1,weekday=0)).strftime('%Y-%m-%d')),
+                                ('date', '&lt;=', (context_today() + relativedelta(weekday=6)).strftime('%Y-%m-%d')),
+                            ]"/>
+                    <filter string="This Month" name="this_month"
+                            domain="['&amp;',
+                                ('date', '>=', (context_today() + relativedelta(day=1)).strftime('%Y-%m-%d')),
+                                ('date', '&lt;=', (context_today() + relativedelta(months=1, day=1, days=-1)).strftime('%Y-%m-%d')),
+                            ]"/>
+                    <filter string="This Year" name="this_year" domain="[('date','&gt;=',time.strftime('%%Y-01-01'))]"/>
+
+
+                    <group string="Group By">
+                        <filter name="group_by_product_id" string="Product"
+                                context="{'group_by': 'product_id'}"/>
+                        <filter name="group_by_order_id" string="Order"
+                                context="{'group_by': 'order_id'}"/>
+                        <filter name="group_by_date" string="Date"
+                                context="{'group_by': 'date'}"/>
+                        <filter name="group_by_user_id" string="User"
+                                context="{'group_by': 'user_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        <record id="mrp_costing_action" model="ir.actions.act_window">
+            <field name="name">Manufacturing Cost</field>
+            <field name="res_model">mrp.costing</field>
+            <field name="view_mode">tree,kanban,form,search</field>
+            <field name="view_type">form</field>
+        </record>
+        <menuitem id="menu_finance_reports"
+                  name="Reporting"
+                  parent="account.menu_finance"
+                  sequence="5"/>
+        <menuitem
+                id="menu_mrp_costing"
+                name="Manufacturing Cost"
+                parent="account.menu_finance_reports"
+                action="mrp_costing_action"
+                groups="account.group_account_manager,account.group_account_user"
+        />
+
+    </data>
+</odoo>

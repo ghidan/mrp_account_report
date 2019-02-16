@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_consumption">
+        <t t-call="report.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="report.internal_layout">
+                    <div class="page">
+
+                        <div class="row mt32 mb32">
+                            <div class="col-xs-4">
+                                <p>
+                                    <t t-if="docs.date_from">
+                                        <strong>Date from :</strong>
+                                        <span t-esc="docs.date_from"/>
+                                        <br/>
+                                    </t>
+                                    <t t-if="docs.date_to">
+                                        <strong>Date to :</strong>
+                                        <span t-esc="docs.date_to"/>
+                                    </t>
+                                    <t t-if="docs.manufacturing_order_id">
+                                        <strong>Manufacturing Order:</strong>
+                                        <span t-esc="docs.manufacturing_order_id"/>
+                                    </t>
+                                    <t t-if="docs.summary">
+                                        <strong>Summary:</strong>
+                                        <span t-esc="docs.summary"/>
+                                    </t>
+                                </p>
+                            </div>
+                        </div>
+
+                        <table class="table table-condensed">
+                            <thead>
+                                <tr>
+                                    <t t-if="docs.summary == 'True'">
+                                        <th>Product</th>
+                                        <th class="text-right">Consumed</th>
+                                        <th class="text-right">Remaining</th>
+                                        <th class="text-right">Planned</th>
+                                    </t>
+                                    <t t-if="docs.summary != 'True'">
+                                        <th>Date</th>
+                                        <th class="text-right">Product</th>
+                                        <th class="text-right">Order</th>
+                                        <th class="text-right">Quantity</th>
+                                        <th class="text-right">User</th>
+                                    </t>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="orders" t-as="a">
+                                    <t t-if="docs.summary == 'True'">
+                                        <td>
+                                            <span t-esc="a.product_id.name"/>
+                                        </td>
+                                        <td class="text-right" style="white-space: text-nowrap;">
+                                            <span t-esc="a.quantity_done"/>
+                                        </td>
+                                    </t>
+                                    <t t-if="docs.summary != 'True'">
+                                        <td>
+                                            <span t-esc="a.raw_material_production_id.date_planned_start"/>
+                                        </td>
+                                        <td class="text-right" style="white-space: text-nowrap;">
+                                            <span t-esc="a.product_id.name"/>
+                                        </td>
+                                        <td class="text-right" style="white-space: text-nowrap;">
+                                            <span t-esc="a.raw_material_production_id.name"/>
+                                        </td>
+                                        <td class="text-right" style="white-space: text-nowrap;">
+                                            <span t-esc="a.quantity_done"/>
+                                        </td>
+                                        <td class="text-right" style="white-space: text-nowrap;">
+                                            <span t-esc="a.raw_material_production_id.user_id.name"/>
+                                        </td>
+                                    </t>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>
